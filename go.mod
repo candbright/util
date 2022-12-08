@@ -1,4 +1,4 @@
-module github.com/candbright/gin-util
+module github.com/candbright/util
 
 go 1.15
 
