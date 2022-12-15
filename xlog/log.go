@@ -2,6 +2,7 @@ package xlog
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
@@ -172,11 +173,11 @@ func (logger *Log) HandlerFunc(preStr string) gin.HandlerFunc {
 			t := io.NopCloser(bytes.NewBuffer(buff))
 			c.Request.Body = t
 			bodyStr = string(buff)
-			//bodyStr = strings.ReplaceAll(bodyStr, "\n", "")
-			//bodyStr = strings.ReplaceAll(bodyStr, "\"", "")
-			//bodyStr = strings.ReplaceAll(bodyStr, "\t", "")
-			//bodyStr = strings.ReplaceAll(bodyStr, "\r", "")
-			//bodyStr = strings.ReplaceAll(bodyStr, " ", "")
+			var out bytes.Buffer
+			err := json.Indent(&out, buff, "", "\t")
+			if err == nil {
+				bodyStr = out.String()
+			}
 		}
 		c.Next()
 		// Log only when path is not being skipped
