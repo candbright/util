@@ -53,7 +53,7 @@ func (logger *Log) Link() {
 	} else if f == nil {
 		panic(errors.New("link failed, file handler is nil"))
 	}
-	logger.file = f
+	logger.file = io.MultiWriter(f, os.Stdout)
 	if logger.format != nil {
 		logger.debugLogger = log.New(logger.file, logger.format.preDebug, logger.format.flag)
 		logger.infoLogger = log.New(logger.file, logger.format.preInfo, logger.format.flag)
