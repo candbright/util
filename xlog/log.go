@@ -54,7 +54,7 @@ func (logger *Log) Link() {
 	} else if f == nil {
 		panic(errors.New("link failed, file handler is nil"))
 	}
-	logger.file = io.MultiWriter(f, os.Stdout)
+	logger.file = f
 	if logger.format != nil {
 		logger.debugLogger = log.New(logger.file, logger.format.preDebug, logger.format.flag)
 		logger.infoLogger = log.New(logger.file, logger.format.preInfo, logger.format.flag)
@@ -126,11 +126,12 @@ func formatter(param gin.LogFormatterParams, preStr string, bodyStr string) stri
 			param.Path,
 		)
 		if bodyStr != "" {
-			str += "\n\t" + bodyStr
+			str += "\n" + bodyStr
 			if param.ErrorMessage != "" {
-				str += "  " + param.ErrorMessage
+				str += "\n" + param.ErrorMessage
 			}
 		}
+		str += "\n"
 		return str
 	} else {
 		str := fmt.Sprintf("[%s] %v | %3d | %13v | %15s | %-7s %#v",
@@ -143,11 +144,12 @@ func formatter(param gin.LogFormatterParams, preStr string, bodyStr string) stri
 			param.Path,
 		)
 		if bodyStr != "" {
-			str += "\n\t" + bodyStr
+			str += "\n" + bodyStr
 			if param.ErrorMessage != "" {
-				str += "  " + param.ErrorMessage
+				str += "\n" + param.ErrorMessage
 			}
 		}
+		str += "\n"
 		return str
 	}
 }

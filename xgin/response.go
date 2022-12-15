@@ -17,7 +17,7 @@ const (
 type Result struct {
 	Code       int64       `json:"code"`
 	Data       interface{} `json:"data,omitempty"`
-	ErrStr     string      `json:"error,omitempty"`
+	Message    string      `json:"message,omitempty"`
 	Err        error       `json:"-"`
 	HttpStatus int         `json:"-"`
 }
@@ -86,13 +86,14 @@ func Response(c *gin.Context, result Result) {
 			if result.Code == CodeSuccess {
 				result.Code = CodeUnknown
 			}
-			result.ErrStr = errors.Cause(result.Err).Error()
+			result.Message = errors.Cause(result.Err).Error()
 			c.AbortWithStatusJSON(result.HttpStatus, result)
 		}
 	} else {
 		if result.Err != nil {
-			result.ErrStr = errors.Cause(result.Err).Error()
+			result.Message = errors.Cause(result.Err).Error()
+		} else {
+			c.AbortWithStatusJSON(result.HttpStatus, result)
 		}
-		c.AbortWithStatusJSON(result.HttpStatus, result)
 	}
 }

@@ -30,7 +30,7 @@ func POST(context *gin.Context, handler func(receive interface{}, pathParams map
 	if preCheck, ok := receive.(IPreCheck); ok {
 		checkErr := preCheck.PreCheck()
 		if checkErr != nil {
-			Failed(context, NewResultErr(CodePreCheckFailed, err, http.StatusBadRequest))
+			Failed(context, NewResultErr(CodePreCheckFailed, checkErr, http.StatusBadRequest))
 		}
 	}
 	params := make(map[string]string)
