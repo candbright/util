@@ -72,22 +72,22 @@ func (logger *Log) PreCheck() {
 
 func (logger *Log) Debug(format string, v ...interface{}) {
 	logger.PreCheck()
-	_ = logger.debugLogger.Output(2, fmt.Sprintf(format, v...))
+	_ = logger.debugLogger.Output(3, fmt.Sprintf(format, v...))
 }
 
 func (logger *Log) Info(format string, v ...interface{}) {
 	logger.PreCheck()
-	_ = logger.infoLogger.Output(2, fmt.Sprintf(format, v...))
+	_ = logger.infoLogger.Output(3, fmt.Sprintf(format, v...))
 }
 
 func (logger *Log) Warn(format string, v ...interface{}) {
 	logger.PreCheck()
-	_ = logger.warnLogger.Output(2, fmt.Sprintf(format, v...))
+	_ = logger.warnLogger.Output(3, fmt.Sprintf(format, v...))
 }
 
 func (logger *Log) Error(format string, v ...interface{}) {
 	logger.PreCheck()
-	_ = logger.errorLogger.Output(2, fmt.Sprintf(format, v...))
+	_ = logger.errorLogger.Output(3, fmt.Sprintf(format, v...))
 }
 
 func defaultLogFormat() *LogFormat {
