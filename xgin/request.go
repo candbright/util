@@ -16,6 +16,7 @@ func GET(context *gin.Context, handler func(pathParams map[string]string) (inter
 	res, err := handler(params)
 	if err != nil {
 		Failed(context, err)
+		return
 	}
 	Ok(context, res)
 }
@@ -26,11 +27,13 @@ func POST(context *gin.Context, handler func(receive interface{}, pathParams map
 	)
 	if err = context.ShouldBindJSON(receive); err != nil {
 		Failed(context, NewResultErr(CodeBindJsonFailed, err, http.StatusBadRequest))
+		return
 	}
 	if preCheck, ok := receive.(IPreCheck); ok {
 		checkErr := preCheck.PreCheck()
 		if checkErr != nil {
 			Failed(context, NewResultErr(CodePreCheckFailed, checkErr, http.StatusBadRequest))
+			return
 		}
 	}
 	params := make(map[string]string)
@@ -40,6 +43,7 @@ func POST(context *gin.Context, handler func(receive interface{}, pathParams map
 	res, err := handler(receive, params)
 	if err != nil {
 		Failed(context, err)
+		return
 	}
 	Ok(context, res)
 }

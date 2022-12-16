@@ -10,8 +10,8 @@ import (
 const (
 	CodeUnknown        = -1
 	CodeSuccess        = 0
-	CodeBindJsonFailed = 1001 + iota
-	CodePreCheckFailed
+	CodeBindJsonFailed = 1
+	CodePreCheckFailed = 2
 )
 
 type Result struct {
