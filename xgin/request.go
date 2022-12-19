@@ -5,15 +5,11 @@ import (
 	"net/http"
 )
 
-func GET(context *gin.Context, handler func(pathParams map[string]string) (interface{}, error)) {
+func GET(context *gin.Context, handler func() (interface{}, error)) {
 	var (
 		err error
 	)
-	params := make(map[string]string)
-	for _, param := range context.Params {
-		params[param.Key] = param.Value
-	}
-	res, err := handler(params)
+	res, err := handler()
 	if err != nil {
 		Failed(context, err)
 		return
@@ -21,7 +17,7 @@ func GET(context *gin.Context, handler func(pathParams map[string]string) (inter
 	Ok(context, res)
 }
 
-func POST(context *gin.Context, handler func(receive interface{}, pathParams map[string]string) (interface{}, error), receive interface{}) {
+func POST(context *gin.Context, handler func(receive interface{}) (interface{}, error), receive interface{}) {
 	var (
 		err error
 	)
@@ -36,11 +32,7 @@ func POST(context *gin.Context, handler func(receive interface{}, pathParams map
 			return
 		}
 	}
-	params := make(map[string]string)
-	for _, param := range context.Params {
-		params[param.Key] = param.Value
-	}
-	res, err := handler(receive, params)
+	res, err := handler(receive)
 	if err != nil {
 		Failed(context, err)
 		return
@@ -48,10 +40,10 @@ func POST(context *gin.Context, handler func(receive interface{}, pathParams map
 	Ok(context, res)
 }
 
-func PUT(context *gin.Context, handler func(receive interface{}, pathParams map[string]string) (interface{}, error), receive interface{}) {
+func PUT(context *gin.Context, handler func(receive interface{}) (interface{}, error), receive interface{}) {
 	POST(context, handler, receive)
 }
 
-func DELETE(context *gin.Context, handler func(pathParams map[string]string) (interface{}, error)) {
+func DELETE(context *gin.Context, handler func() (interface{}, error)) {
 	GET(context, handler)
 }
